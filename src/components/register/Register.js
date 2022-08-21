@@ -50,8 +50,8 @@ function RegisterUser() {
             'data': data,
             headers:headers
         }).then(data=>{
-            console.log("Request sent successfully");
-            console.log(data)
+            // console.log("Request sent successfully");
+            // console.log(data)
             if(data.status == 201){
                 console.log("user created successfully")
 
@@ -61,8 +61,8 @@ function RegisterUser() {
             }
             
         }).catch(err=>{
-            console.log("Error while making register api post call")
-            console.log(err)
+            // console.log("Error while making register api post call")
+            // console.log(err)
             if (data.status=422){
                 console.log("user not created ",err.response.data)
                 
@@ -75,7 +75,7 @@ function RegisterUser() {
         setregisterBtnText("Register")
     }
     const handleRegisterClick = ()=>{
-        console.log("clicked register user");
+        // console.log("clicked register user");    
         try{
             if( !ValidateEmailAddress(username) ){
                 handleFormValidationFailure('Email address not in required format')
@@ -90,7 +90,7 @@ function RegisterUser() {
             callRegisterApi()
         }
         catch(err){
-            console.log(err)
+            // console.log(err)
         }
     }
   return (
