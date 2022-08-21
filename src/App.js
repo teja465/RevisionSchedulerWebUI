@@ -1,23 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
+import ResponsiveAppBar from "./components/navbar/ResponsiveNavBar";
+import LoginForm from './components/login/LoginForm';
+import RegisterUser from "./components/register/Register";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ResponsiveAppBar />
+      {/* <LoginForm /> */}
+      <RegisterUser />
     </div>
   );
 }
