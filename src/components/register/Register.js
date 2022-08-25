@@ -28,6 +28,7 @@ function RegisterUser() {
     const [AlertText, setAlertText] = useState("")
 
     const handleFormValidationFailure=(errorMessage)=>{
+        console.log("in handleFormValidationFailure",errorMessage)
         throw errorMessage
     }
     const callRegisterApi = ()=>{
@@ -50,19 +51,12 @@ function RegisterUser() {
             'data': data,
             headers:headers
         }).then(data=>{
-            // console.log("Request sent successfully");
-            // console.log(data)
             if(data.status == 201){
-                console.log("user created successfully")
-
-                setAlertText("user created successfully")
+                setAlertText("user created successfully .click <a href=`/login`>here</a> to login")
                 setIsAlertEnabled(true)
                 setalertType("success")
             }
-            
         }).catch(err=>{
-            // console.log("Error while making register api post call")
-            // console.log(err)
             if (data.status=422){
                 console.log("user not created ",err.response.data)
                 
@@ -75,32 +69,40 @@ function RegisterUser() {
         setregisterBtnText("Register")
     }
     const handleRegisterClick = ()=>{
-        // console.log("clicked register user");    
         try{
             if( !ValidateEmailAddress(username) ){
                 handleFormValidationFailure('Email address not in required format')
             }
             if(password != confirmPassword){
-                handleFormValidationFailure('Passowrds not matching')
+                handleFormValidationFailure('Passwords not matching')
             }
+            if(password.length <=10){
+                handleFormValidationFailure(' Password length is too short.Minimum size is 10')
+            }
+
             if (username.trim().length ==0 || password.trim().length == 0 || nickName.trim().length ==0){
                 handleFormValidationFailure('All fields are mandatory to fill')
+            }
+            if (username.trim() == nickName.trim()){
+                handleFormValidationFailure('Username and nick name cant be same')
             }
             setformValidationFailedMessage("")
             callRegisterApi()
         }
         catch(err){
-            // console.log(err)
+            setAlertText(err)
+                setIsAlertEnabled(true)
+                setalertType("danger")
         }
     }
   return (
-    <MDBContainer className=" my-5 d-flex flex-column col-12 col-lg-6 ">
-        <h2 className='signup_text mx-auto p-10'>Signup to get started </h2>
+    <MDBContainer className="my-5 d-flex flex-column col-12 col-lg-6 ">
+        <h2 className='primary signup_text mx-auto p-10'>Signup to get started </h2>
       
-      <MDBInput onChange={(e)=>{setusername(e.target.value)}} wrapperClass='mb-4' label='User Name john@foo.com' id='form1' type='email'/>
-      <MDBInput onChange={(e)=>{setNickName(e.target.value)}} wrapperClass='mb-4' label='First name' id='form1' type='email'/>
-      <MDBInput onChange={(e)=>{setpassword(e.target.value)}} wrapperClass='mb-4' label='Password' id='form2' type='password'/>
-      <MDBInput onChange={(e)=>{setconfirmPassword(e.target.value)}} wrapperClass='mb-4' label='Confirm Password' id='form2' type='password'/>
+      <MDBInput onChange={(e)=>{setusername(e.target.value.trim())}} wrapperClass='mb-4' label='User Name john@foo.com' id='form1' type='email'/>
+      <MDBInput onChange={(e)=>{setNickName(e.target.value.trim())}} wrapperClass='mb-4' label='First name' id='form1' type='email'/>
+      <MDBInput onChange={(e)=>{setpassword(e.target.value.trim())}} wrapperClass='mb-4' label='Password' id='form2' type='password'/>
+      <MDBInput onChange={(e)=>{setconfirmPassword(e.target.value.trim())}} wrapperClass='mb-4' label='Confirm Password' id='form2' type='password'/>
 
       <MDBBtn onClick={(e)=>handleRegisterClick(e)} className="mb-4 mx-auto col-lg-6 col-8" disabled={isRegisterBtnVisisble?"":"false"}>{registerBtnText}</MDBBtn>
 
@@ -120,10 +122,7 @@ function RegisterUser() {
         
       </div> }
       {IsAlertEnabled && <Alert type={alertType} message={AlertText} />}
-
-
     </MDBContainer>
   );
 }
-
 export default RegisterUser;
