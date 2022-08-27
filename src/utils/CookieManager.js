@@ -31,3 +31,7 @@ export function setCookie(cname, cvalue, exdays) {
       }
     }
   }
+  export function deleteCookie(key){
+    const res=document.cookie = `${key}=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+    console.log(`${key}=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;` , res)
+  }

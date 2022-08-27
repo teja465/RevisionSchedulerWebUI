@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {
     MDBContainer,
     MDBInput,
@@ -10,9 +10,15 @@ import Alert from "../Alert";
 import {stage, configs } from "../../Constants";
 import axios from "axios";
 import qs from "qs";
-import { setCookie,getCookie } from "../../utils/CookieManager";
-  import { handleFormValidationFailure } from "../../utils/CommonUtils";
+import { setCookie,getCookie ,deleteCookie} from "../../utils/CookieManager";
+import { handleFormValidationFailure } from "../../utils/CommonUtils";
+
+import { useSelector, useDispatch } from 'react-redux'
+import { logInUser , logOutUser ,initialState  } from "../../reducers/userSlice";
+
 function LoginForm() {
+    const user = useSelector( state => state.user)
+    const dispatch = useDispatch()
     const [UserName, setUserName] = useState("")
     const [Password, setPassword] = useState("")
 
@@ -22,6 +28,7 @@ function LoginForm() {
 
     const [isRegisterBtnVisisble, setisRegisterBtnVisisble] = useState(true)
     const [registerBtnText, setregisterBtnText] = useState("Register")
+    const loginCookies=["user_email","jwt_token"]
 
     const sendLoginApiRequest=()=>{
       console.log("Send login api request")
@@ -30,6 +37,7 @@ function LoginForm() {
       setregisterBtnText("Logging in")
 
       const endpoint = configs[stage]['endpoint']+"/api/login"
+
       const body={
         'username':UserName,
         'password':Password
@@ -37,11 +45,10 @@ function LoginForm() {
       const headers= {
         "content-type": "application/x-www-form-urlencoded",
       }
-      
-     
+
       var data = qs.stringify({
-        'username': 'tejaaa@postman.com',
-        'password': 'aaaaaaaaaaa' 
+        'username': UserName,
+        'password':Password 
       });
       var config = {
         method: 'post',
@@ -55,7 +62,7 @@ function LoginForm() {
 
       axios(config)
       .then(function (response) {
-        if (response.status ==200){
+        if (response.status == 200){
 
           setAlertText("Logged in successfully .")
           setIsAlertEnabled(true)
@@ -63,24 +70,39 @@ function LoginForm() {
           const body = JSON.parse(response.request.response);
           const jwt_cookie =`access_token=${body["access_token"]}`
           setCookie('jwt_token',body['access_token'],5)
-          setCookie('access_token',body['refresh_token'],5)
           setCookie('user_email',UserName,5)
+          dispatch(logInUser({
+            isLoggedIn :true,
+            jwtToken: body['access_token'],
+            userEmail:UserName,
+          }))
 
+        }
+        else if (response.status == 401){
+          console.error('User credentails not match',initialState)
+          dispatch(logInUser(initialState))
         }
 
 
       })
       .catch(function (error) {
-        console.log(error);
+        console.log("in catch block",error);
+        setAlertText("Login attempt failed .Please provide valid credentials")
+        setIsAlertEnabled(true)
+        setalertType("danger")
+        console.error('User credentails not match')
+        dispatch(logOutUser(initialState))
+        
+        loginCookies.forEach(element => {
+          deleteCookie(element)
+          console.log("deleted cookie ",element)
+        });
+
       });
       
       setisRegisterBtnVisisble(true)
 
-
-
-
     }
-
     const handleLoginSubmit=(e)=>{
         try{
             if (UserName.trim().length ==0 || Password.trim().length ==0){
@@ -100,10 +122,12 @@ function LoginForm() {
 
 
     }
+    
+    
   return (
     <MDBContainer className="my-5 d-flex flex-column col-12 col-lg-6 ">
         <h2 className='primary signup_text mx-auto p-10'>Login </h2>
-      
+        {/* {user.isLoggedIn? <h3>user logged in </h3>:<h3>user not logged in</h3>} */}
       <MDBInput onChange={(e)=>{setUserName(e.target.value.trim())}}  wrapperClass='mb-4' label='User Name john@foo.com' id='form1' type='email'/>
       <MDBInput onChange={(e)=>{setPassword(e.target.value.trim())}} wrapperClass='mb-4' label='Password' id='form2' type='password'/>
 

@@ -1,0 +1,21 @@
+.span{
+    font-weight: 800;
+    color: rebeccapurple;
+}
+.user_learning_item{
+    /* border: 2px solid black; */
+    margin-inline: 2px;
+}
+hr{
+    opacity: 0.3;
+}
+.user_learning_item_title{
+    font-size: larger;
+    font-weight: 600;
+}
+.user_learning_item_description{
+    font-weight: 300;
+    font-size: small;
+    margin-left: 2%;
+
+}

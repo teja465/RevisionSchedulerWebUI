@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState , useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,13 +15,49 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import './responsivenavbar.css'
-const pages = ['My Learnings',];
-const settings = ['Profile','Login', 'Logout'];
+import { useSelector, useDispatch } from 'react-redux';
+import store from '../../store';
+import { ContactlessOutlined } from '@mui/icons-material';
+
+const pages = ['My Learnings',"foo2"];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [settings, setSettings] = useState([])
+  const [currentUser, setCurrentUser] = useState(useSelector(state=>state.user))
+  const PageToUrlMappings={
+    'My Learnings':'my-learnings'
+  }
 
+
+  const unsubscribe = store.subscribe(
+    ()=>{
+      console.log("Subscribe() in navbar")
+      const currentUser = store.getState().user
+      setCurrentUser(currentUser)
+      if (currentUser.isLoggedIn){
+        console.log('user is logged in subscribe()')
+        setSettings(["Profile","Logout"])
+      }
+      else{
+        console.log('user is not logged in subscribe()')
+        setSettings(["Login"])
+
+      }
+    }
+  )
+  useEffect(() => {
+    console.log(" Navbar Use effect function()")
+    if ( ! currentUser.isLoggedIn){
+      setSettings(["Login"])
+    }
+
+    return () => {
+      
+    }
+  },[])
+  
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -30,11 +67,16 @@ const ResponsiveAppBar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    console.log("clicked handleCloseNavMenu ")
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const handlePageClick=(page)=>{
+    console.log("clicked page in navbar ",page ,`${PageToUrlMappings[page]}`)
+    window.location.replace(`${PageToUrlMappings[page]}`)
+  }
 
   return (
     <AppBar position="static">
@@ -89,8 +131,9 @@ const ResponsiveAppBar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page} >
+                  <Typography textAlign="center" >
+                    {page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -118,7 +161,7 @@ const ResponsiveAppBar = () => {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={()=>{handlePageClick(page)}}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
@@ -127,8 +170,9 @@ const ResponsiveAppBar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+            {currentUser.userEmail}&nbsp;
+
             <NotificationsIcon fontSize='large' className="navbar_notifications" />
-            
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
