@@ -39,7 +39,7 @@ export default function RevisionSchedule({revisionsList}) {
       sx={{  flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
       <TreeItem nodeId="1" label="Revisions">
-        {revisionsList.map((ele,ind)=><TreeItem nodeId={`a${getNodeId(ind)}`} label={getFormattedLabel(ind+1,ele.date)} />)}
+        {revisionsList.map((ele,ind)=>< TreeItem key={ind}  nodeId={`a${getNodeId(ind)}`} label={getFormattedLabel(ind+1,ele.date)} />)}
       </TreeItem>
      
     </TreeView>

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import store from '../../store'
 import UserLearningItem from './UserLearningItem'
 import {stage, configs } from "../../Constants";
+import CreateLearningItemForm from './createLearningItem/createlearningitemform'
 
 export default function Mylearnings() {
     const [userState, setUserState] = useState(store.getState().user)
@@ -61,7 +62,8 @@ export default function Mylearnings() {
     
   return (
     <div>
-        {learningItemsList.map((ele)=><  UserLearningItem  item={ele}/>)}
-        </div>
+        <CreateLearningItemForm  jwtToken={userState.jwtToken}/>
+        {learningItemsList.map((ele,ind)=><  UserLearningItem key={ind}  item={ele}/>)}
+    </div>
   )
 }
