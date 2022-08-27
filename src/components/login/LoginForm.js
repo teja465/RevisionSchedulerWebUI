@@ -52,7 +52,7 @@ function LoginForm() {
       });
       var config = {
         method: 'post',
-        url: 'http://localhost:8080/api/login',
+        url: endpoint,
         headers: { 
           'Content-Type': 'application/x-www-form-urlencoded'
         },

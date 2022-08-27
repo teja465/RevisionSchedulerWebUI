@@ -28,7 +28,7 @@ function RegisterUser() {
     const [AlertText, setAlertText] = useState("")
 
     const handleFormValidationFailure=(errorMessage)=>{
-        console.log("in handleFormValidationFailure",errorMessage)
+        // console.log("in handleFormValidationFailure",errorMessage)
         throw errorMessage
     }
     const callRegisterApi = ()=>{
@@ -46,7 +46,7 @@ function RegisterUser() {
 
         axios({
             method: requestType,
-            url: 'http://localhost:8080/api/signup',
+            url: endpoint+'api/signup',
             withCredentials: false,
             'data': data,
             headers:headers
@@ -58,7 +58,7 @@ function RegisterUser() {
             }
         }).catch(err=>{
             if (data.status=422){
-                console.log("user not created ",err.response.data)
+                // console.log("user not created ",err.response.data)
                 
                 setAlertText(err.response.data.message)
                 setIsAlertEnabled(true)

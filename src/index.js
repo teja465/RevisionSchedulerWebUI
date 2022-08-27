@@ -7,6 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Provider } from 'react-redux'
 import store from "./store";
+import TimeAgo from 'javascript-time-ago'
+
+import en from 'javascript-time-ago/locale/en.json'
+import ru from 'javascript-time-ago/locale/ru.json'
+import is from 'javascript-time-ago/locale/is.json'
+
+TimeAgo.addDefaultLocale(en)
+TimeAgo.addLocale(en)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

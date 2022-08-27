@@ -1,158 +1,67 @@
+import axios from 'axios'
 import React,{useState,useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import store from '../../store'
 import UserLearningItem from './UserLearningItem'
+import {stage, configs } from "../../Constants";
+
 export default function Mylearnings() {
     const [userState, setUserState] = useState(store.getState().user)
-    const items =[
-        {
-            "id": 220,
-            "username": "foo@ooo.opo9",
-            "title": "learn redux",
-            "description": "revise from docs",
-            "createdOn": null,
-            "updatedOn": null,
-            "version": 0,
-            "revisionSchedules": [
-                {
-                    "id": 221,
-                    "userLearningId": 220,
-                    "revisionCount": 1,
-                    "revisionScheduleDate": "2022-09-06",
-                    "createDate": "2022-08-27",
-                    "user": null
-                },
-                {
-                    "id": 222,
-                    "userLearningId": 220,
-                    "revisionCount": 2,
-                    "revisionScheduleDate": "2022-09-21",
-                    "createDate": "2022-08-27",
-                    "user": null
-                },
-                {
-                    "id": 223,
-                    "userLearningId": 220,
-                    "revisionCount": 3,
-                    "revisionScheduleDate": "2022-10-11",
-                    "createDate": "2022-08-27",
-                    "user": null
-                }
-            ]
-        },
-        {
-            "id": 224,
-            "username": "foo@ooo.opo9",
-            "title": "Revise js concepts",
-            "description": "revise from docs",
-            "createdOn": null,
-            "updatedOn": null,
-            "version": 0,
-            "revisionSchedules": [
-                {
-                    "id": 225,
-                    "userLearningId": 224,
-                    "revisionCount": 1,
-                    "revisionScheduleDate": "2022-09-06",
-                    "createDate": "2022-08-27",
-                    "user": null
-                },
-                {
-                    "id": 226,
-                    "userLearningId": 224,
-                    "revisionCount": 2,
-                    "revisionScheduleDate": "2022-09-21",
-                    "createDate": "2022-08-27",
-                    "user": null
-                },
-                {
-                    "id": 227,
-                    "userLearningId": 224,
-                    "revisionCount": 3,
-                    "revisionScheduleDate": "2022-10-11",
-                    "createDate": "2022-08-27",
-                    "user": null
-                }
-            ]
-        },
-        {
-            "id": 228,
-            "username": "foo@ooo.opo9",
-            "title": "Eat chicken",
-            "description": "revise from docs",
-            "createdOn": null,
-            "updatedOn": null,
-            "version": 0,
-            "revisionSchedules": [
-                {
-                    "id": 229,
-                    "userLearningId": 228,
-                    "revisionCount": 1,
-                    "revisionScheduleDate": "2022-09-06",
-                    "createDate": "2022-08-27",
-                    "user": null
-                },
-                {
-                    "id": 230,
-                    "userLearningId": 228,
-                    "revisionCount": 2,
-                    "revisionScheduleDate": "2022-09-21",
-                    "createDate": "2022-08-27",
-                    "user": null
-                },
-                {
-                    "id": 231,
-                    "userLearningId": 228,
-                    "revisionCount": 3,
-                    "revisionScheduleDate": "2022-10-11",
-                    "createDate": "2022-08-27",
-                    "user": null
-                }
-            ]
-        }
-    ]
+    const items = []
+    const [learningItemsList, setLearningItemsList] = useState(items)
 
     useEffect(() => {
       console.log("page reloaded fetching users learning items")
+      const endpoint = configs[stage]['endpoint']
+      const headers= {
+        "content-type" : "application/json",
+        "Authorization" : `Bearer ${userState.jwtToken}`
+      }
+      const requestConfigs={
+            method: 'get',
+            url: endpoint+'/api/user-learning-item',
+            withCredentials: false,
+            headers:headers
+      }
+      console.log(requestConfigs)
+      axios(requestConfigs)
+      .then((data)=>{
+        console.log("fetched learning items ",data.data)
+        setLearningItemsList(data.data)
+      })
+      .catch(err=>{
+        console.log("error while fetching learning items ",err)
+        if (err.code =="ERR_NETWORK"){
+            alert(" backend seems down, not able to fetch data")
+
+        }
+      })
       return () => {
       }
     }, [])
 
     const handleUnauthenticatedUserVisit = (userState)=>{
         if ( !userState.isLoggedIn){
-            console.log("user dont have access to page , redirecting to login page")
             alert("Please login to acces this page")
             window.location.replace("/login")
         }
     }
     store.subscribe(()=>{
-        console.log("My learnings subscribe",store.getState().user)
         setUserState(store.getState().user)
         if ( !store.getState().user.isLoggedIn) {
-            handleUnauthenticatedUserVisit()
+            handleUnauthenticatedUserVisit(userState)
         }
     })
 
     useEffect(() => {
-        console.log("Some state changed ",userState)
-
-        // if (userState  == null){
-        //     console.log("User state not updated yet")
-        //     return ;
-        // }
         handleUnauthenticatedUserVisit(userState)
-
-       
         return () => {
         }
       },)
     
   return (
     <div>
-        {/* {userState!=null && userState.isLoggedIn?"Logged in ":"Not logged in "}<br /> */}
-        Mylearnings feed 
-        <UserLearningItem item={items[1]}  />
-        {items.map((ele)=><  UserLearningItem  item={ele}/>)}
+        {learningItemsList.map((ele)=><  UserLearningItem  item={ele}/>)}
         </div>
   )
 }
