@@ -7,15 +7,22 @@
     margin-inline: 2px;
 }
 hr{
-    opacity: 0.3;
+    opacity: 0.99;
 }
 .user_learning_item_title{
-    font-size: larger;
-    font-weight: 600;
+    color: #1776D1;
+    font-weight: bolder;
+}
+.user_learning_item_title_holder{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.delete_icon{
+color: #1776D1;
 }
 .user_learning_item_description{
     font-weight: 300;
     font-size: small;
     margin-left: 2%;
-
 }
