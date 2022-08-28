@@ -5,11 +5,15 @@ import store from '../../store'
 import UserLearningItem from './UserLearningItem'
 import {stage, configs } from "../../Constants";
 import CreateLearningItemForm from './createLearningItem/createlearningitemform'
-
+import { Button } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove';
+import "./mylearnings.css"
 export default function Mylearnings() {
     const [userState, setUserState] = useState(store.getState().user)
     const items = []
     const [learningItemsList, setLearningItemsList] = useState(items)
+    const [isCreateItemFormVisible, setIsCreateItemFormVisible] = useState(false)
 
     useEffect(() => {
       console.log("page reloaded fetching users learning items")
@@ -61,8 +65,14 @@ export default function Mylearnings() {
       },)
     
   return (
-    <div>
-        <CreateLearningItemForm  jwtToken={userState.jwtToken}/>
+    <div className='d-flex flex-column'>
+      { !isCreateItemFormVisible?<Button className='show_form'  onClick={()=>setIsCreateItemFormVisible(true)}> 
+      <AddIcon  />  Create revision item</Button>
+      :<Button className='hide_form'  onClick={()=>setIsCreateItemFormVisible(false
+        )} > <RemoveIcon />  Close</Button> }
+      
+       {isCreateItemFormVisible && <CreateLearningItemForm  jwtToken={userState.jwtToken}/> }
+        
         {learningItemsList.map((ele,ind)=><  UserLearningItem key={ind}  item={ele}/>)}
     </div>
   )

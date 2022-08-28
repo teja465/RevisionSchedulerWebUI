@@ -1,0 +1,11 @@
+
+.hide_form,.show_form{
+    display: none;
+    font-size: 0 !important;
+}
+
+.hide_form:hover,.show_form:hover{
+    font-size: small !important;
+    transition: 150ms;
+    text-transform: capitalize;
+}
