@@ -50,7 +50,6 @@ export default function CreateLearningItemForm({jwtToken}) {
             console.log("Error ",err)
             toggleAlert(true,"danger" , "Error while saving data "+err.message)
         })
-
     }
   return (
     <div  className='create_user_learning_item_form col-11 text-center col-lg-8 mx-auto mt-2'>
@@ -61,7 +60,7 @@ export default function CreateLearningItemForm({jwtToken}) {
         <TextField className='textfield' fullWidth 
         margin='normal' label="Description"
         onChange={(e)=>setDescription(e.target.value.trim())}   />
-        <Button onClick={()=>handleFormSubmit()} className="save_button mb-4 mx-auto col-lg-6 col-8" variant="contained">save</Button>
+        <Button onClick={()=>handleFormSubmit()} className="save_button mb-4 mx-auto col-lg-6 col-6 col-sm-8 col-md-8" variant="contained">save</Button>
 
         <div className='d-flex justify-content-between mx-auto' style={{width: '100%'}}>
             {IsAlertEnabled && <Alert type={alertType} message={AlertText} />}
