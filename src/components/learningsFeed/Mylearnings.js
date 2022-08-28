@@ -66,8 +66,9 @@ export default function Mylearnings() {
     
   return (
     <div className='d-flex flex-column'>
-      { !isCreateItemFormVisible? <Button className='show_form'  onClick={()=>setIsCreateItemFormVisible(true)}> 
-      <AddIcon  />  Create revision item</Button>:<Button className='hide_form'  onClick={()=>setIsCreateItemFormVisible(false
+      { !isCreateItemFormVisible?<Button className='show_form'  onClick={()=>setIsCreateItemFormVisible(true)}> 
+      <AddIcon  />  Create revision item</Button>
+      :<Button className='hide_form'  onClick={()=>setIsCreateItemFormVisible(false
         )} > <RemoveIcon />  Close</Button> }
       
        {isCreateItemFormVisible && <CreateLearningItemForm  jwtToken={userState.jwtToken}/> }
