@@ -18,6 +18,7 @@ import './userprofile.css'
 export default function UserProfile() {
     const [user, setUser] = useState(store.getState().user)
     const [userRevisionSchedule, setuserRevisionSchedule] = useState('')
+    const [userProfileFromdb, setuserProfileFromdb] = useState(null)
 
     // states to manage alerts 
     const [alertType, setalertType] = useState("success")
@@ -65,21 +66,55 @@ export default function UserProfile() {
 
     }
 
+    const getUserProfile=(userEmail)=>{
+      
+      const headers = { 
+        'Content-Type': 'application/json',
+         "Authorization" : `Bearer ${user.jwtToken}`
+      }
+      const endpoint = configs[stage]['endpoint']+"/api/get-user-profile/"+userEmail;
+      const config ={
+        method: 'get',
+        url: endpoint,
+        headers: headers,
+      }
+      axios(config).then(data=>{
+        console.log(data.data.userProfile)
+        setuserProfileFromdb(data.data.userProfile)
+        console.log("From db",userProfileFromdb)
+
+      }).catch(err=>{
+        console.log(err)
+      })
+
+
+    }
+
     useEffect(() => {
       handleUnauthenticatedUserVisit(user)
       console.log("changed");
+      
     }, )
 
     useEffect(() => {
       toggleAlert(false,"success","")
     },[userRevisionSchedule] )
+
+    useEffect(() => {
+      toggleAlert(false,"success","")
+      getUserProfile(user.userEmail)
+    },[] )
     
   return (
     <div>
 
       <MDBContainer className="my-5 d-flex flex-column col-12 col-lg-6 ">
             <h2 className='primary signup_text mx-auto p-10'>User profile </h2>
-          <MDBInput onChange={(e)=>{setuserRevisionSchedule(e.target.value)}}  wrapperClass='mb-4' label='Revision Schedule pattern ex : 3,5,10' id='form2' type='text'/>
+          <MDBInput onChange={(e)=>{setuserRevisionSchedule(e.target.value)}}  wrapperClass='mb-4'
+          label={`Revision Schedule pattern  : ${userProfileFromdb!=null && userProfileFromdb.revisionPattern} `} id='form2' 
+          type='text'
+          placeholder={userProfileFromdb!=null && userProfileFromdb.revisionPattern}
+          />
 
           <MDBBtn   className="mb-4 mx-auto col-lg-6 col-8" onClick={(e)=>handleUpdateUserProfile(e)} > Save</MDBBtn>
 
