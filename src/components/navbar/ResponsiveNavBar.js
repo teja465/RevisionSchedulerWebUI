@@ -18,18 +18,23 @@ import './responsivenavbar.css'
 import { useSelector, useDispatch } from 'react-redux';
 import store from '../../store';
 import { ContactlessOutlined } from '@mui/icons-material';
-
-const pages = ['My Learnings',"foo2"];
+import {deleteAllCookies} from "../../utils/CookieManager"
+const pages = ['My Learnings',];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [settings, setSettings] = useState([])
-  const [currentUser, setCurrentUser] = useState(useSelector(state=>state.user))
-  const PageToUrlMappings={
-    'My Learnings':'my-learnings'
-  }
+  const [settings, setSettings] = useState(['foo']);
+  const [currentUser, setCurrentUser] = useState(store.getState().user);
 
+  const LOGOUT ="Logout"
+
+
+  const PageToUrlMappings={
+    'My Learnings':'my-learnings',
+    'Profile':'profile',
+    "Login" :"login"
+  }
 
   const unsubscribe = store.subscribe(
     ()=>{
@@ -38,7 +43,7 @@ const ResponsiveAppBar = () => {
       setCurrentUser(currentUser)
       if (currentUser.isLoggedIn){
         console.log('user is logged in subscribe()')
-        setSettings(["Profile","Logout"])
+        setSettings(["Profile",LOGOUT])
       }
       else{
         console.log('user is not logged in subscribe()')
@@ -52,10 +57,10 @@ const ResponsiveAppBar = () => {
     if ( ! currentUser.isLoggedIn){
       setSettings(["Login"])
     }
-
-    return () => {
-      
+    else {
+      setSettings(["Profile" ,LOGOUT])
     }
+
   },[])
   
   const handleOpenNavMenu = (event) => {
@@ -70,12 +75,22 @@ const ResponsiveAppBar = () => {
     console.log("clicked handleCloseNavMenu ")
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleCloseUserMenu = (e) => {
+    console.log("clicked ",e);
   };
   const handlePageClick=(page)=>{
+    if (page ==LOGOUT) {
+      handleLogoutClick()
+      alert("Logged out user")
+      return ;
+    }
     console.log("clicked page in navbar ",page ,`${PageToUrlMappings[page]}`)
     window.location.replace(`${PageToUrlMappings[page]}`)
+  }
+
+  const handleLogoutClick=()=>{
+    deleteAllCookies()
+    window.location.replace("/");
   }
 
   return (
@@ -197,7 +212,7 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={(e)=>handlePageClick(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
