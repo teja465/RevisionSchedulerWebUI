@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react';
 import { logInUser } from './reducers/userSlice';
 import Mylearnings from './components/learningsFeed/Mylearnings';
+import UserProfile from './components/profile/UserProfile';
 function App() {
   const dispatch = useDispatch()
   if( (getCookie("jwt_token") != '') && getCookie("user_email")!='' ){
@@ -22,14 +23,7 @@ function App() {
   }
 
   useEffect(() => {
-    // if( (getCookie("jwt_token") != '') && getCookie("user_email")!='' ){
-    //   // Todo :validate credentails before setting 
-    //   dispatch(logInUser({
-    //     isLoggedIn :true,
-    //     jwtToken: getCookie("jwt_token"),
-    //     userEmail:getCookie("user_email"),
-    //   }))
-    // }
+
     return () => {
     }
   }, [])
@@ -42,7 +36,7 @@ function App() {
           <Route path="signup" element={<RegisterUser/>} />
           <Route path="login" element={<LoginForm/>} />
           <Route path ="my-learnings" element={<Mylearnings />}/>
-
+          <Route path ="profile" element={< UserProfile/>}/>
       </Routes>
       </BrowserRouter>
       {/* <LoginForm /> */}
