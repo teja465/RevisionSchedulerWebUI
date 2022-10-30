@@ -19,7 +19,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import store from '../../store';
 import { ContactlessOutlined } from '@mui/icons-material';
 import {deleteAllCookies} from "../../utils/CookieManager"
-const pages = ['My Learnings',];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -28,6 +27,9 @@ const ResponsiveAppBar = () => {
   const [currentUser, setCurrentUser] = useState(store.getState().user);
 
   const LOGOUT ="Logout"
+  const MY_LEARNINGS = "My Learnings"
+  const [pages, setPages] = useState([MY_LEARNINGS,])
+
 
 
   const PageToUrlMappings={
@@ -56,6 +58,7 @@ const ResponsiveAppBar = () => {
     console.log(" Navbar Use effect function()")
     if ( ! currentUser.isLoggedIn){
       setSettings(["Login"])
+      setPages(["Login"])
     }
     else {
       setSettings(["Profile" ,LOGOUT])
@@ -90,6 +93,7 @@ const ResponsiveAppBar = () => {
 
   const handleLogoutClick=()=>{
     deleteAllCookies()
+    // redirect user to home page 
     window.location.replace("/");
   }
 

@@ -67,6 +67,9 @@ function LoginForm() {
           setAlertText("Logged in successfully .")
           setIsAlertEnabled(true)
           setalertType("success")
+          setTimeout(() => {
+            window.location.replace("/")
+          }, 2000);
           const body = JSON.parse(response.request.response);
           const jwt_cookie =`access_token=${body["access_token"]}`
           setCookie('jwt_token',body['access_token'],5)

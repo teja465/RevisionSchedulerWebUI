@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { logInUser } from './reducers/userSlice';
 import Mylearnings from './components/learningsFeed/Mylearnings';
 import UserProfile from './components/profile/UserProfile';
+import HomePage from './HomePage';
 function App() {
   const dispatch = useDispatch()
   if( (getCookie("jwt_token") != '') && getCookie("user_email")!='' ){
@@ -37,6 +38,7 @@ function App() {
           <Route path="login" element={<LoginForm/>} />
           <Route path ="my-learnings" element={<Mylearnings />}/>
           <Route path ="profile" element={< UserProfile/>}/>
+          <Route path ="" element={< HomePage/>}/>
       </Routes>
       </BrowserRouter>
       {/* <LoginForm /> */}
