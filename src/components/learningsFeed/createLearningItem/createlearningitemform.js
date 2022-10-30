@@ -48,7 +48,7 @@ export default function CreateLearningItemForm({jwtToken}) {
         })
         .catch(err=>{
             console.log("Error ",err)
-            toggleAlert(true,"danger" , "Error while saving data "+err.message)
+            toggleAlert(true,"danger" , "Error while saving data  : "+err.response.data.message)
         })
     }
   return (
