@@ -43,22 +43,22 @@ function RegisterUser() {
         }
         const requestType='post';
         const endpoint =configs[stage]['endpoint']
-
+        console.log("Calling ",data,endpoint+'api/signup')
         axios({
             method: requestType,
-            url: endpoint+'api/signup',
+            url: endpoint+'/api/signup',
             withCredentials: false,
             'data': data,
             headers:headers
         }).then(data=>{
             if(data.status == 201){
-                setAlertText("user created successfully .click <a href=`/login`>here</a> to login")
+                setAlertText("user created successfully .please login")
                 setIsAlertEnabled(true)
                 setalertType("success")
             }
         }).catch(err=>{
             if (data.status=422){
-                // console.log("user not created ",err.response.data)
+                console.log("got 422 response ",err)
                 
                 setAlertText(err.response.data.message)
                 setIsAlertEnabled(true)
