@@ -27,6 +27,8 @@ const ResponsiveAppBar = () => {
   const [currentUser, setCurrentUser] = useState(store.getState().user);
 
   const LOGOUT ="Logout"
+  const LOGIN ="Login"
+  const SIGNUP ="Signup"
   const MY_LEARNINGS = "My Learnings"
   const [pages, setPages] = useState([MY_LEARNINGS,])
 
@@ -35,7 +37,8 @@ const ResponsiveAppBar = () => {
   const PageToUrlMappings={
     'My Learnings':'my-learnings',
     'Profile':'profile',
-    "Login" :"login"
+    'Login' :"login",
+    "Signup":"signup"
   }
 
   const unsubscribe = store.subscribe(
@@ -49,7 +52,7 @@ const ResponsiveAppBar = () => {
       }
       else{
         console.log('user is not logged in subscribe()')
-        setSettings(["Login"])
+        setSettings([LOGIN])
 
       }
     }
@@ -57,8 +60,8 @@ const ResponsiveAppBar = () => {
   useEffect(() => {
     console.log(" Navbar Use effect function()")
     if ( ! currentUser.isLoggedIn){
-      setSettings(["Login"])
-      setPages(["Login"])
+      setSettings([LOGIN,SIGNUP])
+      setPages([LOGIN,SIGNUP])
     }
     else {
       setSettings(["Profile" ,LOGOUT])
@@ -87,6 +90,7 @@ const ResponsiveAppBar = () => {
       alert("Logged out user")
       return ;
     }
+    console.log(PageToUrlMappings)
     console.log("clicked page in navbar ",page ,`${PageToUrlMappings[page]}`)
     window.location.replace(`${PageToUrlMappings[page]}`)
   }
