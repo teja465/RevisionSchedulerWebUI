@@ -9,3 +9,9 @@
     transition: 150ms;
     text-transform: capitalize;
 }
+
+.login_message{
+    margin: auto;
+    color :#1776D1;
+    margin-top: 2%;
+}

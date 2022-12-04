@@ -46,10 +46,10 @@ export default function Mylearnings() {
     }, [])
 
     const handleUnauthenticatedUserVisit = (userState)=>{
-        if ( !userState.isLoggedIn){
-            alert("Please login to acces this page")
-            window.location.replace("/login")
-        }
+        // if ( !userState.isLoggedIn){
+        //     alert("Please login to acces learning items")
+        //     window.location.replace("/login")
+        // }
     }
     store.subscribe(()=>{
         setUserState(store.getState().user)
@@ -66,14 +66,15 @@ export default function Mylearnings() {
     
   return (
     <div className='d-flex flex-column'>
-      { !isCreateItemFormVisible?<Button className='show_form'  onClick={()=>setIsCreateItemFormVisible(true)}> 
+      { userState.isLoggedIn && !isCreateItemFormVisible?<Button className='show_form'  onClick={()=>setIsCreateItemFormVisible(true)}> 
       <AddIcon  />  Create revision item</Button>
-      :<Button className='hide_form'  onClick={()=>setIsCreateItemFormVisible(false
+      :userState.isLoggedIn && <Button className='hide_form'  onClick={()=>setIsCreateItemFormVisible(false
         )} > <RemoveIcon />  Close</Button> }
       
        {isCreateItemFormVisible && <CreateLearningItemForm  jwtToken={userState.jwtToken}/> }
         
         {learningItemsList.map((ele,ind)=><  UserLearningItem key={ind}  item={ele}/>)}
+        {!userState.isLoggedIn && <p className='login_message' >Please login to check your revision schedules</p>}
     </div>
   )
 }

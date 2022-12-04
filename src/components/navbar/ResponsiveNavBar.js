@@ -30,7 +30,7 @@ const ResponsiveAppBar = () => {
   const LOGIN ="Login"
   const SIGNUP ="Signup"
   const MY_LEARNINGS = "My Learnings"
-  const [pages, setPages] = useState([MY_LEARNINGS,])
+  const [pages, setPages] = useState([])
 
 
 

@@ -36,9 +36,9 @@ function App() {
       <Routes path="/" element={<RegisterUser />}>
           <Route path="signup" element={<RegisterUser/>} />
           <Route path="login" element={<LoginForm/>} />
-          <Route path ="my-learnings" element={<Mylearnings />}/>
+          {/* <Route path ="my-learnings" element={<Mylearnings />}/> */}
           <Route path ="profile" element={< UserProfile/>}/>
-          <Route path ="" element={< HomePage/>}/>
+          <Route path ="" element={< Mylearnings/>}/>
       </Routes>
       </BrowserRouter>
       {/* <LoginForm /> */}
